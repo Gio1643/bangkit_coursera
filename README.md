@@ -1,2 +1,2 @@
-# bangkit_coursera
+# bangkit_capstone
 Introduction to Our Capstone Product
