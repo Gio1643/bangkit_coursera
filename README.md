@@ -1,2 +1,9 @@
-# bangkit_capstone
-Introduction to Our Capstone Product
+## Project setup
+```
+npm install
+```
+
+### Run
+```
+npm run start
+```
