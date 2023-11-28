@@ -1,6 +1,7 @@
 // Import the functions from user.js
-const { createUser, findUserByEmail } = require('../models/user');
-const bcrypt = require('bcrypt');
+require("dotenv").config();
+const { createUser, findUserByEmail } = require("../models/user");
+const jwt = require("jsonwebtoken");
 // Use the functions in authController.js
 /**
  * @swagger
@@ -29,12 +30,17 @@ const register = async (req, res) => {
 
   // Make sure name, email, and password are not falsy
   if (!name || !email || !password) {
-    return res.status(400).json({ message: 'Invalid user data' });
+    return res.status(400).json({ message: "Invalid user data" });
   }
 
   try {
+    // check if a user already exists
+    const existingUser = await findUserByEmail(email);
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
     const user = await createUser(name, email, password);
-    res.status(201).json({ message: 'Register successful', user });
+    res.status(201).json({ message: "Register successful", user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -73,18 +79,29 @@ const login = async (req, res) => {
     const user = await findUserByEmail(email);
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Check the password
-    const isPasswordCorrect = (password === user.password);
+    const isPasswordCorrect = password === user.password;
 
     if (!isPasswordCorrect) {
-      return res.status(401).json({ message: 'Incorrect password' });
+      return res.status(401).json({ message: "Incorrect password" });
     }
 
+    // Create a token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
     // If the password is correct, send a response to the client
-    res.status(200).json({ message: 'Login successful', user });
+    res.status(200).json({
+      error: false,
+      message: "Login successful",
+      user: {
+        UserId: user.id,
+        name: user.name,
+        token: token,
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
