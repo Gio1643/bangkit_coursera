@@ -19,16 +19,19 @@ const Aksara = require("../models/aksara");
  *         description: Some server error
  */
 const createAksara = async (req, res) => {
-  const { name, urlImage } = req.body;
+  const { name, description, urlImage, urlYoutube } = req.body;
 
   // Make sure name and url are not falsy
-  if (!name || !urlImage) {
+  if (!name || !description || !urlImage || !urlYoutube) {
     return res.status(400).json({ message: "Invalid aksara data" });
   }
 
   try {
-    await Aksara.createAksara(name, urlImage);
-    res.status(200).json({ message: "Aksara created successfully" });
+    await Aksara.createAksara(name, description, urlImage, urlYoutube);
+    res.status(200).json({ 
+      error: false,
+      message: "Aksara created successfully" 
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -58,7 +61,11 @@ const readAksara = async (req, res) => {
   try {
     const id = req.params.id;
     const aksara = await Aksara.readAksara(id);
-    res.json(aksara);
+    res.status(200).json({
+      error: false,
+      message: "Aksara fetch successfully" ,
+      aksara: aksara 
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -79,7 +86,11 @@ const readAksara = async (req, res) => {
 const listAllAksara = async (req, res) => {
   try {
     const aksaras = await Aksara.listAllAksara();
-    res.json(aksaras);
+    res.status(200).json({
+      error: false,
+      message: "Aksara fetch all successfully" ,
+      aksara: aksaras
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -30,9 +30,11 @@ const validateInputs = (req, res, next) => {
 *       500:
 *         description: Some server error
 */
-router.post('/', [
+router.post('/aksara', [
   check('name').notEmpty(),
+  check('description').notEmpty(),
   check('urlImage').notEmpty(),
+  check('urlYoutube').notEmpty(),
   validateInputs
 ], createAksara);
 
