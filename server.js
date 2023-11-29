@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const authRoutes = require('./app/routes/userRoutes');
+const aksaraRoutes = require('./app/routes/aksaraRoutes');
 
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -22,5 +23,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(express.json());
 app.use('/api/auth', authRoutes);
+app.use('/api/aksara', aksaraRoutes);
 
 app.listen(3000, () => console.log('Server started on port 3000'));
