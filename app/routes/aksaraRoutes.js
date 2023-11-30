@@ -14,7 +14,25 @@ const validateInputs = (req, res, next) => {
 };
 /**
 * @swagger
-* /aksara:
+* components:
+*   schemas:
+*     Aksara:
+*       type: object
+*       properties:
+*         name:
+*           type: string
+*         description:
+*           type: string
+*         urlImage:
+*           type: string
+*         urlYoutube:
+*           type: string
+*       required:
+*         - name
+*         - description
+*         - urlImage
+*         - urlYoutube
+* /api/aksara:
 *   post:
 *     summary: Create a new Aksara
 *     tags: [Aksara]
@@ -30,7 +48,7 @@ const validateInputs = (req, res, next) => {
 *       500:
 *         description: Some server error
 */
-router.post('/aksara', [
+router.post('/', [
   check('name').notEmpty(),
   check('description').notEmpty(),
   check('urlImage').notEmpty(),
@@ -40,7 +58,7 @@ router.post('/aksara', [
 
 /**
  * @swagger
- * /aksara/{id}:
+ * /api/aksara/{id}:
  *   get:
  *     summary: Get an Aksara by ID
  *     tags: [Aksara]
@@ -62,7 +80,7 @@ router.get('/:id', readAksara);
 
 /**
  * @swagger
- * /aksara:
+ * /api/aksara:
  *   get:
  *     summary: Get all Aksara
  *     tags: [Aksara]
